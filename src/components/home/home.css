@@ -1,0 +1,15 @@
+.parent {
+    width: 100%;
+    aspect-ratio: 16/8;
+    background-image: url('https://res.cloudinary.com/abasskola/image/upload/v1737552226/loans-slider-bg_wxgqxj.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 6rem;
+    padding-right: 6rem;
+}
+.content-header{
+}
