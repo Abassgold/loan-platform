@@ -15,7 +15,7 @@ const Nav = () => {
   return (
     <>
       <section className='bg-[#ffffff] sticky z-50 top-0'>
-        <nav className="relative flex h-[15vh] items-center max-w-7xl  px-8 justify-between xl:m-auto lg:px-12">
+        <nav className="relative flex h-[12vh] items-center max-w-7xl px-2 md:px-8 justify-between xl:m-auto lg:px-12">
           <div className=' flex items-center'>
             <Link href='/'>
               <Image

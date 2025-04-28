@@ -29,7 +29,7 @@ export function DropdownMenuCheckboxes() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed inset-0 top-[6rem] bg-white z-50 w-screen h-[calc(100vh-4rem)] overflow-y-auto"
+          className="fixed inset-0 top-[6rem] bg-white z-50 w-screen h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden"
         >
           {navLinks.map((link, index) => (
             <li
@@ -41,7 +41,7 @@ export function DropdownMenuCheckboxes() {
               </Link>
             </li>
           ))}
-          <Link href="/signup" className="bg-gray-800 text-gray-100 text-center my-4 rounded-xl px-5 py-3  hover:bg-gray-900 active:bg-gray-600 block md:flex items-center gap-2 capitalize">get started
+          <Link href="/signup" className="bg-gray-800 text-gray-100 text-center my-4 rounded-xl px-5 py-3  hover:bg-gray-900 active:bg-gray-600 block md:flex items-center gap-2 capitalize ">get started
           </Link>
         </motion.ul>
       )}

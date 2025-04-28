@@ -12,9 +12,9 @@ const Hero = () => {
         <p className="m-auto w-[34ch] text-center text-gray-500 md:m-0 md:text-left">
         Take control of your finances and start spending smarter with tailored loan and investment solutions designed to help you grow, save, and achieve your goals effortlessly.
         </p>
-        <div className='flex gap-2 my-4 items-center '>
+        <div className='flex justify-center md:justify-start gap-2 my-4 items-center '>
         <Link href='' className="button">Invest</Link>
-        <Link href='/loan/apply' className='button1'>Get Loan</Link>
+        <Link href='/dashboard' className='button1'>Get Loan</Link>
         </div>
       </div>
       <div className="md:w-3/6 xl:mb-12 xl:overflow-hidden">
