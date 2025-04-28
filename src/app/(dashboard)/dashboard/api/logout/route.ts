@@ -1,4 +1,4 @@
-import { deleteCookie } from "@/lib/auth/session";
+import { deleteCookie } from "@/lib/auth/deletCookies";
 import { NextResponse } from "next/server";
 
 export async function GET(){
