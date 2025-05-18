@@ -54,6 +54,7 @@ const SignIn = () => {
                 if (res?.success) {
                     dispatch(addUser(res))
                     router.push('/dashboard');
+                    console.log('going to dashboard');
                     return res;
                 }
                 toast.error(res.msg)
