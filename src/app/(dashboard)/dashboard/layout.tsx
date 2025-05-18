@@ -26,12 +26,12 @@ const DashboardLayout = ({
   return (
     <section className='h-screen flex'>
       {/* Sidebar for mobile and desktop */}
-      <div className={`fixed inset-0 z-[999] bg-white w-full h-full p-8 transition-transform duration-300 lg:hidden ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed inset-0 z-[999] bg-white w-full h-full p-2 md:p-8 transition-transform duration-300 lg:hidden ${open ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className='flex justify-between items-center'>
           <Image
             src='/CreditGrow.png'
             alt='creditgrow logo'
-            width={120}
+            width={100}
             height={50}
             className=' cursor-pointer'
           />
@@ -70,8 +70,8 @@ const DashboardLayout = ({
         <Image
             src='/CreditGrow.png'
             alt='creditgrow logo'
-            width={150}
-            height={150}
+            width={100}
+            height={50}
             className=' cursor-pointer'
           />
         <div>
@@ -104,8 +104,8 @@ const DashboardLayout = ({
             <Image
               src='/CreditGrow.png'
               alt='creditgrow logo'
-              width={120}
-              height={90}
+              width={100}
+              height={50}
             className=' cursor-pointer'
             />
             <button onClick={() => setOpen(true)}>

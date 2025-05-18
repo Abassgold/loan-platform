@@ -24,27 +24,6 @@ const page = async () => {
     month: '2-digit',
     day: '2-digit',
   });
-  console.log(formattedDate);
-
-  // {
-  //   success: true,
-  //   loan: {
-  //     _id: '6802df1b36aa4673c62ced2b',
-  //     user: {
-  //       _id: '67cccdde2c71a060ec096ca9',
-  //       name: 'Azeez Abass Kolawole',
-  //       email: 'abasskola10@gmail.com',
-  //       role: 'admin'
-  //     },
-  //     fullName: 'abass',
-  //     businessName: 'uieuieruirui',
-  //     loanAmount: 6000,
-  //     fundingReason: 'Legal Services',
-  //     cellPhone: '23408103875407',
-  //     duration: 3,
-  //     status: 'pending'
-  //   }
-  // }
 
   if (!res.ok) {
     console.log('data not fected');

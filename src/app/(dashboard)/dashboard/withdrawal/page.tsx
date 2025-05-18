@@ -1,9 +1,9 @@
 'use client'
 import Typewriter from '@/lib/typewriter/Typewriter';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useFormik } from 'formik'
 import { useRouter } from 'next/navigation';
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 import { toast, Toaster } from 'sonner';
 import * as Yup from 'yup';
 
@@ -11,57 +11,38 @@ import * as Yup from 'yup';
 const Withdrawal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false)
-  const [selfie, setSelfie] = useState<string | null>(null);
-  const [file, setFile] = useState<string | null>(null);
   const router = useRouter()
-  // Open Camera for Selfie
-  const takeSelfie = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-      const video = document.createElement("video");
-      video.srcObject = stream;
-      await new Promise((resolve) => (video.onloadedmetadata = resolve));
-
-      // Capture Image
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d")?.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      const dataUrl = canvas.toDataURL("image/png"); // Convert to Base64
-      convertToBase16(dataUrl, setSelfie); // Convert to Base16
-      stream.getTracks().forEach(track => track.stop()); // Stop camera
-    } catch (error) {
-      console.error("Error opening camera:", error);
-    }
-  };
-
-  // Handle File Selection (Gallery)
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      convertToBase16(file, setFile);
-    }
-  };
-
-  // Convert to Base16 (Hex)
-  const convertToBase16 = (input: Blob | string, setFile: React.Dispatch<React.SetStateAction<string | null>>) => {
-    if (typeof input === "string") {
-      const base64 = input.split(",")[1];
-      const binary = atob(base64);
-      const hex = Array.from(binary).map((char) => char.charCodeAt(0).toString(16).padStart(2, "0")).join("");
-      setFile(hex);
-    } else {
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
       const reader = new FileReader();
+
+      reader.readAsDataURL(file);
+
       reader.onload = () => {
-        if (reader.result instanceof ArrayBuffer) {
-          const hex = [...new Uint8Array(reader.result)].map(byte => byte.toString(16).padStart(2, "0")).join("");
-          setFile(hex);
+        if (typeof reader.result === 'string') {
+          resolve(reader.result);
+        } else {
+          reject(new Error('File could not be converted to base64'));
         }
       };
-      reader.readAsArrayBuffer(input);
+
+      reader.onerror = (error) => reject(error);
+    });
+  };
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        const base64 = await convertToBase64(file);
+        formik.setFieldValue('identification', base64)
+      } catch (error) {
+        console.error('Error converting to base64:', error);
+      }
     }
   };
+
 
 
   const formik = useFormik({
@@ -70,16 +51,14 @@ const Withdrawal = () => {
       accountName: '',
       accountNumber: '',
       amountToWithdraw: '',
-      selfie: '',
-      file: '',
+      identification: ''
     },
     validationSchema: Yup.object({
       bankName: Yup.string(),
       accountName: Yup.string(),
       accountNumber: Yup.number(),
       amountToWithdraw: Yup.number().min(5000, 'Amount must be at least $5000'),
-      selfie: Yup.string(),
-      file: Yup.string(),
+      identification: Yup.string(),
     }),
     onSubmit: async (values) => {
       setLoading(true)
@@ -95,7 +74,12 @@ const Withdrawal = () => {
           setIsOpen(true)
         }
       } catch (error) {
-        console.log(error)
+        const err = error as AxiosError
+        if (err.response?.status === 401) {
+          router.push('/signin')
+          return
+        }
+        console.log(err.message);
       } finally {
         setLoading(false)
       }
@@ -105,16 +89,10 @@ const Withdrawal = () => {
 
   return (
     <section className="h-full">
-      <button
-        onClick={() => setIsOpen(true)}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        Open Modal
-      </button>
+
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 text-center relative">
-            {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-2xl"
@@ -122,7 +100,6 @@ const Withdrawal = () => {
               &times;
             </button>
 
-            {/* Modal Content */}
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full">
               <svg
                 viewBox="0 0 48 48"
@@ -198,7 +175,6 @@ const Withdrawal = () => {
               Please follow the next steps to make your payment.
             </p>
 
-            {/* Action Button */}
             <div className="mt-6">
               <button
                 onClick={() => {
@@ -258,15 +234,6 @@ const Withdrawal = () => {
             Means of Identification
           </p>
           <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-5">
-            {/* Take Selfie */}
-            <button
-              type='button'
-              onClick={takeSelfie}
-              className="w-full md:flex-1 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 text-center"
-            >
-              Take Selfie 📸
-            </button>
-            {selfie && <p className="text-sm text-green-500 mt-2">Selfie Taken!</p>}
 
             {/* Choose from Gallery */}
             <label className="w-full md:flex-1 bg-gray-200 text-black p-2 rounded-md hover:bg-gray-300 text-center cursor-pointer">
@@ -275,10 +242,12 @@ const Withdrawal = () => {
                 type="file"
                 accept="image/*"
                 className="hidden"
+                name='identification'
                 onChange={handleFileChange}
+                onBlur={formik.handleBlur}
+                required
               />
             </label>
-            {file && <p className="text-sm text-green-500 mt-2">File Selected!</p>}
           </div>
         </div>
         <div className=" text-center text-[1rem] text-white mt-4">

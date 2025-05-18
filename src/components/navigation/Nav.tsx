@@ -21,7 +21,7 @@ const Nav = () => {
               <Image
                 src='/CreditGrow.png'
                 alt='creditgrow logo'
-                width={150}
+                width={100}
                 height={50}
               />
             </Link>

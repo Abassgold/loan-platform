@@ -3,7 +3,7 @@ export interface navtypes{
         child: string
 }
 export const navLinks:navtypes[] = [
-    { href: "/features", child: "Features" },
+    { href: "/", child: "Home" },
     { href: "/about-us", child: "About Us" },
     { href: "/contact-us", child: "Contact Us" },
     { href: "/courses", child: "FAQ" },
