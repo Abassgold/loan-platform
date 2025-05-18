@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 export const isAuthenticated = async (token: string, reqUrl: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/authentication`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/authentication`,
+         {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
