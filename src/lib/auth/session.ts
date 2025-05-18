@@ -10,7 +10,7 @@ export const isAuthenticated = async (token: string, reqUrl: string) => {
     });
 
     if (!res.ok) {
-        return NextResponse.redirect(new URL('/contact-us', reqUrl));
+        return NextResponse.redirect(new URL('/signin', reqUrl));
     }
 
     return NextResponse.next();
