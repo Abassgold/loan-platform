@@ -52,6 +52,7 @@ const SignIn = () => {
                   }) 
                   const res : findUser = data
                 if (res?.success) {
+                    toast.success(res.msg)
                     dispatch(addUser(res))
                     router.push('/dashboard');
                     console.log('going to dashboard');
