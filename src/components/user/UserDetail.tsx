@@ -41,7 +41,7 @@ const UserDetail = () => {
         fetchDetails()
     })
     return (
-        <div>welcome, {name.user?.name}👋</div>
+        <span>{name.user?.name}</span>
     )
 }
 

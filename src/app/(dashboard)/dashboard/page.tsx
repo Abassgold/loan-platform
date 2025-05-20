@@ -3,8 +3,7 @@ import { DollarSign } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
 import React from 'react'
-
-const page = async () => {
+const LoanDashboard = async () => {
   const token = (await cookies()).get('authToken')?.value
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/loans/dashboard`, {
     method: 'GET',
@@ -14,8 +13,8 @@ const page = async () => {
     },
   });
   const data = await res.json()
-  const createdAt = data?.loan && new Date(data.loan.createdAt);
-  const monthsToAdd = data?.loan.duration;
+  const createdAt = data?.success && data?.loan && new Date(data.loan.createdAt);
+  const monthsToAdd = data?.success && data?.loan.duration;
 
   const dueDate = new Date(createdAt);
   dueDate.setMonth(dueDate.getMonth() + monthsToAdd);
@@ -35,7 +34,7 @@ const page = async () => {
       <div className=' flex flex-col lg:flex-row justify-between gap-4  items-stretch mb-4'>
         <div className='border border-[#cbd5e1]  flex-1 p-[2rem] rounded-[1rem]'>
           <div className="text-gray-600 md:text-[2rem] capitalize">
-            <UserDetail/>
+            <div>welcome, <UserDetail /> 👋</div>
           </div>
           <h1 className='md:text-2xl my-2 font-[600]'>Loan Summary</h1>
           <div className='flex gap-4 justify-between items-center'>
@@ -43,18 +42,18 @@ const page = async () => {
               ${data?.success ? data.loan.loanAmount : 0}.00
             </p>
             {!data?.success ? (
-               <Link href='/dashboard/application' className="bg-gray-800 text-white rounded-xl px-5 py-3 hover:bg-gray-900 active:bg-gray-600">
-               Apply Now
-             </Link>
-            ):(
+              <Link href='/dashboard/application' className="bg-gray-800 text-white rounded-xl px-5 py-3 hover:bg-gray-900 active:bg-gray-600">
+                Apply Now
+              </Link>
+            ) : (
               <Link href='/dashboard/withdrawal' className="bg-gray-800 text-white rounded-xl px-5 py-3  hover:bg-gray-900 active:bg-gray-600">Withdraw
-            </Link>
+              </Link>
             )
             }
           </div>
         </div>
         <div className='border border-[#cbd5e1]  flex-1 p-[2rem] rounded-[1rem]'>
-          <DollarSign/>
+          <DollarSign />
           <div className='flex justify-between items-center border-b p-1 capitalize'>
             <p>Interest Rate</p>
             <p>{data.loan ? '0.05%' : '—'}</p>
@@ -92,7 +91,7 @@ const page = async () => {
                   : data?.loan?.status === 'repaid'
                     ? 'bg-blue-100 text-blue-700'
                     : 'bg-gray-100 text-gray-700'
-              }`}>{data.loan.status}</div> : ''
+              }`}>{data.loan.status}</div> : '—'
             }
           </div>
         </div>
@@ -115,4 +114,4 @@ const page = async () => {
   )
 }
 
-export default page
+export default LoanDashboard;

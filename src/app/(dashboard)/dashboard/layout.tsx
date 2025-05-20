@@ -20,7 +20,7 @@ const DashboardLayout = ({
     { name: 'Wallet', link: '/dashboard/wallet', icon: <WalletMinimal /> },
     { name: 'Account', link: ['/dashboard/account', '/dashboard/account/security'], icon: <Settings /> },
   ]
-  const activeRoute = listArray.find((item) => item.link === pathname)
+  const activeRoute = listArray.find(item => item.link.includes(pathname))
   const heading = activeRoute?.name || 'Dashboard'
 
   return (

@@ -1,9 +1,12 @@
 'use client'
 import Typewriter from '@/lib/typewriter/Typewriter';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { addUser } from '@/redux/slice/auth';
+import { findUser } from '@/redux/type';
 import axios, { AxiosError } from 'axios';
 import { useFormik } from 'formik'
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast, Toaster } from 'sonner';
 import * as Yup from 'yup';
 
@@ -12,6 +15,7 @@ const Withdrawal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false)
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const convertToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -85,7 +89,32 @@ const Withdrawal = () => {
       }
     }
   })
-  console.log(formik.values);
+ const name: findUser = useAppSelector(state => state.auth.user)
+    useEffect(() => {
+        const signinUser = async () => {
+            if (!name?.success) {
+                try {
+                    const { data } = await axios.get(
+                        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/authentication`,
+                        {
+                            headers: { "Content-Type": "application/json" },
+                            withCredentials: true,
+                        }
+                    );
+                    const res: findUser = data;
+                    if (!res?.success) {
+                        router.push("/signin");
+                        return;
+                    }
+                    dispatch(addUser(res));
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+
+        signinUser();
+    });
 
   return (
     <section className="h-full">
@@ -192,7 +221,7 @@ const Withdrawal = () => {
       )}
       <Toaster
         richColors
-        position='top-right'
+        position='top-center'
         duration={2000}
       />
       <form

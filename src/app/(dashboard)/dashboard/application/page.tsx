@@ -10,21 +10,15 @@ import Typewriter from "@/lib/typewriter/Typewriter";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { isValidPhoneNumber } from 'libphonenumber-js';
+import { findUser } from '@/redux/type';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { addUser } from '@/redux/slice/auth';
 
-// interface LoanFormValues {
-//     fullName: string;
-//     businessName: string;
-//     loanAmount: number;
-//     fundingReason: string;
-//     industry: string;
-//     cellPhone: string; 
-//     duration: number;
-//   }
 const Application = () => {
-    useEffect(() => {
-    }, [])
+    
     const router = useRouter()
     const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useAppDispatch()
     const formik = useFormik({
         initialValues: {
             fullName: 'abass',
@@ -76,7 +70,32 @@ const Application = () => {
             }
         }
     })
-    console.log(formik.values);
+    const name: findUser = useAppSelector(state => state.auth.user)
+    useEffect(() => {
+        const signinUser = async () => {
+            if (!name?.success) {
+                try {
+                    const { data } = await axios.get(
+                        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/authentication`,
+                        {
+                            headers: { "Content-Type": "application/json" },
+                            withCredentials: true,
+                        }
+                    );
+                    const res: findUser = data;
+                    if (!res?.success) {
+                        router.push("/signin");
+                        return;
+                    }
+                    dispatch(addUser(res));
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+
+        signinUser();
+    });
 
     return (
         <>
@@ -95,7 +114,7 @@ const Application = () => {
                     <div className="flex flex-col md:flex-row  justify-between items-center gap-2 md:gap-5  mb-2">
                         <div className="md:flex-1 w-full">
                             <label htmlFor="" className="text-[#383839]">Full Name</label>
-                            <input disabled value='abasss' name="fullName" required type="text" className="text-[#383839] block outline-none w-full p-[7px] text-[14px]  border border-[#dadbdd] rounded-[5px] focus:border-blue-700" onChange={formik.handleChange} />
+                            <input disabled  name={name.user?.name} value={name.user?.name} required type="text" className="text-[#383839] block outline-none w-full p-[7px] text-sm  border border-[#dadbdd] rounded-[5px] focus:border-blue-700" onChange={formik.handleChange} />
                         </div>
                         <div className="md:flex-1 w-full">
                             <label htmlFor="" className="text-[#383839]">Cell Phone?</label>
@@ -135,7 +154,7 @@ const Application = () => {
                                 required
                                 name="duration"
                                 placeholder="Choose between 1 - 120 months"
-                                className="text-[#383839] block outline-none w-full p-[7px] text-[14px]  border border-[#dadbdd] rounded-[5px] focus:border-blue-700"
+                                className="text-[#383839] block outline-none w-full p-[7px] text-sm  border border-[#dadbdd] rounded-[5px] focus:border-blue-700"
                             />
                             {formik.touched.duration && formik.errors.duration && (
                                 <label htmlFor="loanAmount" className="mt-1 text-red-600 text-[12px] md:text-[15px]">{formik.errors.duration}</label>
@@ -143,13 +162,13 @@ const Application = () => {
                         </div>
                         <div className="md:flex-1 w-full">
                             <label htmlFor="" className="text-[#383839]">Business Name</label>
-                            <input name="businessName" required type="text" className="text-[#383839] block outline-none w-full p-[7px] text-[14px]  border border-[#dadbdd] rounded-[5px] focus:border-blue-700" onChange={formik.handleChange} />
+                            <input name="businessName" required type="text" className="text-[#383839] block outline-none w-full p-[7px] text-sm  border border-[#dadbdd] rounded-[5px] focus:border-blue-700" onChange={formik.handleChange} />
                         </div>
                     </div>
 
                     <div className="mb-2">
                         <label htmlFor="" className="text-[#383839]">How Much Do You Need in Dollars?</label>
-                        <input name="loanAmount" required type="number" placeholder="Enter amount (Min: $5000)" className="text-[#383839] block outline-none w-full p-[7px] text-[14px]  border border-[#dadbdd] rounded-[5px] focus:border-blue-700" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input name="loanAmount" required type="number" placeholder="Enter amount (Min: $5000)" className="text-[#383839] block outline-none w-full p-[7px] text-sm  border border-[#dadbdd] rounded-[5px] focus:border-blue-700" onChange={formik.handleChange} onBlur={formik.handleBlur} />
                         {formik.touched.loanAmount && formik.errors.loanAmount && (
                             <label htmlFor="loanAmount" className="mt-1 text-red-600 text-[12px] md:text-[15px]">Amount must be at least $5000</label>
                         )}
@@ -172,8 +191,8 @@ const Application = () => {
                             ))}
                         </select>
                     </div>
-                    <div className=" text-center text-[20px] text-white mt-2">
-                        <button className=" p-3 bg-gray-800 rounded-[5px] hover:bg-gray-600" type="submit" disabled={loading}>{loading ? <Typewriter text="Wait" /> : 'Submit'}</button>
+                    <div className=" text-center text-base md:text-xl text-white mt-2">
+                        <button className={`p-3 ${loading && 'bg-gray-600'} bg-gray-700 rounded-xl hover:bg-gray-800`} type="submit" disabled={loading}>{loading ? <Typewriter text="Wait" /> : 'Submit'}</button>
                     </div>
                 </form>
             </section>
