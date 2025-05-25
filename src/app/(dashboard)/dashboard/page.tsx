@@ -2,7 +2,6 @@ import UserDetail from '@/components/user/UserDetail'
 import { DollarSign } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import React from 'react'
 const LoanDashboard = async () => {
   const token = (await cookies()).get('authToken')?.value
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/loans/dashboard`, {
