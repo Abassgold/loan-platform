@@ -2,8 +2,10 @@ import UserDetail from '@/components/user/UserDetail'
 import { DollarSign } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 const LoanDashboard = async () => {
   const token = (await cookies()).get('authToken')?.value
+  if(!token) redirect('/signin')
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/loans/dashboard`, {
     method: 'GET',
     headers: {
@@ -24,7 +26,6 @@ const LoanDashboard = async () => {
   });
 
   if (!res.ok) {
-    console.log('data not fected');
     throw new Error('something went wrong')
   }
 
