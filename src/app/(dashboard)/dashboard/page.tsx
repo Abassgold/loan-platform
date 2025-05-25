@@ -5,7 +5,11 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 const LoanDashboard = async () => {
   const token = (await cookies()).get('authToken')?.value
-  if(!token) redirect('/signin')
+  if (!token) {
+    console.log('Cookie is not found');
+    redirect('/signin')
+    return
+  }
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/loans/dashboard`, {
     method: 'GET',
     headers: {
