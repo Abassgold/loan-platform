@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export const isAuthenticated = async (token: string, reqUrl: string) => {
+export const isAuthenticated = async (token: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/authentication`,
          {
         method: 'GET',
@@ -10,9 +10,7 @@ export const isAuthenticated = async (token: string, reqUrl: string) => {
         },
     });
 
-    if (!res.ok) {
-        return NextResponse.redirect(new URL('/signin', reqUrl));
-    }
+    if (!res.ok) return false
 
-    return NextResponse.next();
+    return true;
 };
