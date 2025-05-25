@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 
 export const isAuthenticated = async (token: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/authentication`,
