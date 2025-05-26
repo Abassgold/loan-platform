@@ -48,7 +48,6 @@ const SignIn = () => {
             try {
                 const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`, values, {
                     headers: { "Content-Type": "application/json" } ,
-                    withCredentials: true
                   }) 
                   const res : findUser = data
                 if (res?.success) {
@@ -62,8 +61,6 @@ const SignIn = () => {
             } catch (error) {
                 const err = error as AxiosError
                 toast.error('Failed to fetch' )
-                console.log(err.message);
-                
             } finally {
                 setLoader(false)
             }
