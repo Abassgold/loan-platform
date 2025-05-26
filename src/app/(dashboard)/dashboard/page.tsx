@@ -61,7 +61,6 @@ const LoanDashboard = async () => {
   return (
     <section className="text-gray-600 bg-white p-2">
       {/* Loan Summary Section */}
-      <h1>{token}</h1>
       <div className="flex flex-col lg:flex-row justify-between gap-4 items-stretch mb-4">
         <div className="border border-[#cbd5e1] flex-1 p-8 rounded-[1rem]">
           <div className="text-gray-600 md:text-2xl capitalize mb-2">
