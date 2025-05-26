@@ -60,6 +60,8 @@ const SignIn = () => {
                 return res;
             } catch (error) {
                 const err = error as AxiosError
+                console.log(err.message);
+                
                 toast.error('Failed to fetch' )
             } finally {
                 setLoader(false)

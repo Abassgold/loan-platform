@@ -2,7 +2,7 @@ import UserDetail from '@/components/user/UserDetail'
 import { DollarSign } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+// import { redirect } from 'next/navigation'
 
 const LoanDashboard = async () => {
   const token = (await cookies()).get('authToken')?.value
