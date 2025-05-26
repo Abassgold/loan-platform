@@ -2,17 +2,15 @@ import UserDetail from '@/components/user/UserDetail'
 import { DollarSign } from 'lucide-react'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-// import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 const LoanDashboard = async () => {
   const token = (await cookies()).get('authToken')?.value
 
   if (!token) {
     console.log('Cookie is not found')
-    // redirect('/signin')
-    return (
-      <div>no tokens</div>
-    )
+    redirect('/signin')
+    return null
   }
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/loans/dashboard`, {
@@ -21,7 +19,6 @@ const LoanDashboard = async () => {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    cache: 'no-store'
   })
 
   if (!res.ok) {

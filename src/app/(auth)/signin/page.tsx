@@ -47,7 +47,6 @@ const SignIn = () => {
             setLoader(true)
             try {
                 const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signin`, values, {
-                    headers: { "Content-Type": "application/json" } ,
                   }) 
                   const res : findUser = data
                 if (res?.success) {
